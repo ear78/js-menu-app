@@ -21,7 +21,8 @@ router.post( '/', async ( req, res ) => {
         item: {
             title: req.body.item.title,
             description: req.body.item.description,
-            calories: req.body.item.calories
+            calories: req.body.item.calories,
+            price: req.body.item.price
         },
         date: new Date()
     } );
@@ -37,6 +38,16 @@ router.delete( '/:id', async ( req, res ) => {
     } );
     res.status( 200 )
         .send();
+} )
+
+// Update Menu item
+router.put( '/:id', async ( req, res ) => {
+    const menuItem = await loadMenuItems();
+    await menuItem.updateOne( {
+        _id: new mongodb.ObjectID( req.params.id )
+    }, {
+        $set: {}
+    } )
 } )
 
 // connection string
