@@ -29,6 +29,16 @@ router.post( '/', async ( req, res ) => {
         .send();
 } )
 
+// Delete Menu Item
+router.delete( '/:id', async ( req, res ) => {
+    const menuItem = await loadMenuItems();
+    await menuItem.deleteOne( {
+        _id: new mongodb.ObjectID( req.params.id )
+    } );
+    res.status( 200 )
+        .send();
+} )
+
 // connection string
 async function loadMenuItems() {
     const client = await mongodb.MongoClient.connect( uri, {
