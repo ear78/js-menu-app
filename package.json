@@ -1,0 +1,27 @@
+{
+  "name": "js-menu-app",
+  "version": "1.0.0",
+  "description": "Simple menu app that uses vanilla js, mongodb, node.js, express to crud values for a user and then print them to a web page as a restaurant menu.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ear78/js-menu-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ear78/js-menu-app/issues"
+  },
+  "homepage": "https://github.com/ear78/js-menu-app#readme",
+  "devDependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.0",
+    "nodemon": "^2.0.4"
+  }
+}
