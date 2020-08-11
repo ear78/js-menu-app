@@ -16,14 +16,10 @@ router.get( '/', async ( req, res ) => {
 router.post( '/', async ( req, res ) => {
     const menuItems = await loadMenuItems();
     await menuItems.insertOne( {
-        restaurant: req.body.restaurant,
         title: req.body.title,
-        item: {
-            title: req.body.item.title,
-            description: req.body.item.description,
-            calories: req.body.item.calories,
-            price: req.body.item.price
-        },
+        subTitle: req.body.subTitle,
+        description: req.body.description,
+        social: req.body.social,
         date: new Date()
     } );
     res.status( 201 )
@@ -46,8 +42,12 @@ router.put( '/:id', async ( req, res ) => {
     await menuItem.updateOne( {
         _id: new mongodb.ObjectID( req.params.id )
     }, {
-        $set: {}
+        $set: {
+            text: req.body.text
+        }
     } )
+    res.status( 200 )
+        .send()
 } )
 
 // connection string
