@@ -39,26 +39,38 @@ function addPageContent( data ) {
         .appendChild( newDiv )
 }
 
+let x = document.querySelectorAll('.social-inputs');
+x.forEach(input => input.style.display = 'none'); // hide inputs initially
+
+let checkBoxes = document.querySelectorAll('input[type="checkbox"]');
+checkBoxes.forEach(box => {
+  box.addEventListener('click', function(e) {
+    console.log(e);
+  })
+})
+
+
+
 let button = document.querySelector('#handle-submit');
 button.addEventListener('click', function() {
   handleSubmit();
 })
 
-let form = document.forms.menuForm
-
-// console.log('form el :', form.elements);
+let form = document.forms.menuForm // Grab form elements
 
 const handleSubmit = () => {
   console.log('handleSubmit', form.elements);
-  let obj = {};
-  let arr = [];
+  let obj = {
+    social: [],
+  };
+
   [...form.elements].forEach((input, index) => {
-      if(input.type === 'checkbox') {
-        obj[input.name] = input.checked
-      } else {
+      if(input.name.indexOf('URL') !== -1 && input.value.length) {
+        obj['social'].push(input.value)
+      }
+      else if (input.type !== 'checkbox' && input.value.length) {
         obj[input.name] = input.value
       }
-
   })
-  console.log(obj, arr);
+  console.log(obj);
 }
