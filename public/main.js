@@ -1,3 +1,4 @@
+
 // Let's Grab the Data from the backend
 let url = 'http://localhost:5001/api/menu-items/'
 
@@ -28,7 +29,7 @@ function addPageContent( data ) {
                     <p class="description">${item.description}</p>
                     <div class="social-box">
                       ${item.social.map(link => {
-                        return `<a href="${link.link}"><i class="fa fa-${link.name}" aria-hidden="true"></i></a>`
+                        return `<a href="${link.link}"><i class="fa fa-${link.icon}" aria-hidden="true"></i></a>`
                       }).join(' ')}
                     </div>
                   </div>`;
@@ -45,30 +46,15 @@ let x = document.querySelectorAll('.social-inputs');
 x.forEach(input => input.style.display = 'none'); // hide inputs initially
 
 const handleSocialInput = (check, name) => {
-  if(check && name === 'facebook') {
-    document.querySelector('#facebook').style.display = 'block'
-  }
-
-  if(check && name === 'linkedin') {
-    document.querySelector('#linkedin').style.display = 'block'
-  }
-
-  if(check && name === 'twitter') {
-    document.querySelector('#twitter').style.display = 'block'
-  }
-
-  if(!check && name === 'facebook') {
-    document.querySelector('#facebook').style.display = 'none'
-  }
-
-  if(!check && name === 'linkedin') {
-    document.querySelector('#linkedin').style.display = 'none'
-  }
-
-  if(!check && name === 'twitter') {
-    document.querySelector('#twitter').style.display = 'none'
-  }
-
+  let socialNames = ['facebook', 'linkedin', 'twitter', 'instagram']
+  socialNames.forEach(socialName => {
+    if(check && name === socialName) {
+      document.querySelector(`#${name}`).style.display = 'block'
+    }
+    if(!check && name === socialName) {
+      document.querySelector(`#${name}`).style.display = 'none'
+    }
+  })
 }
 
 // Let's add click handlers to our checkboxes
@@ -77,7 +63,7 @@ checkBoxes.forEach(box => {
   box.addEventListener('click', function(e) {
     let checked = e.target.checked
     let socialName = e.target.name
-    handleSocialInput(checked, socialName)
+    handleSocialInput(checked, socialName) // Toggles show/hide specific inputs
   })
 })
 
@@ -104,4 +90,9 @@ const handleSubmit = () => {
       }
   })
   console.log(obj);
+  axios.post('http://localhost:5001/api/menu-items/', obj).then((resp) => {
+    console.log('response', resp);
+  }).catch((error) => {
+    console.log('error:', error);
+  })
 }
