@@ -1,3 +1,4 @@
+// Let's Grab the Data from the backend
 let url = 'http://localhost:5001/api/menu-items/'
 
 fetch( url )
@@ -13,6 +14,7 @@ fetch( url )
 
     } )
 
+// Let's print the data dynamically to the browser
 function addPageContent( data ) {
     var newDiv = document.createElement( 'div' );
     var att = document.createAttribute( 'class' );
@@ -26,7 +28,7 @@ function addPageContent( data ) {
                     <p class="description">${item.description}</p>
                     <div class="social-box">
                       ${item.social.map(link => {
-                        return `<i>${link}</i>`
+                        return `<a href="${link.link}"><i class="fa fa-${link.name}" aria-hidden="true"></i></a>`
                       }).join(' ')}
                     </div>
                   </div>`;
@@ -39,26 +41,67 @@ function addPageContent( data ) {
         .appendChild( newDiv )
 }
 
+let x = document.querySelectorAll('.social-inputs');
+x.forEach(input => input.style.display = 'none'); // hide inputs initially
+
+const handleSocialInput = (check, name) => {
+  if(check && name === 'facebook') {
+    document.querySelector('#facebook').style.display = 'block'
+  }
+
+  if(check && name === 'linkedin') {
+    document.querySelector('#linkedin').style.display = 'block'
+  }
+
+  if(check && name === 'twitter') {
+    document.querySelector('#twitter').style.display = 'block'
+  }
+
+  if(!check && name === 'facebook') {
+    document.querySelector('#facebook').style.display = 'none'
+  }
+
+  if(!check && name === 'linkedin') {
+    document.querySelector('#linkedin').style.display = 'none'
+  }
+
+  if(!check && name === 'twitter') {
+    document.querySelector('#twitter').style.display = 'none'
+  }
+
+}
+
+// Let's add click handlers to our checkboxes
+let checkBoxes = document.querySelectorAll('input[type="checkbox"]');
+checkBoxes.forEach(box => {
+  box.addEventListener('click', function(e) {
+    let checked = e.target.checked
+    let socialName = e.target.name
+    handleSocialInput(checked, socialName)
+  })
+})
+
+// Let's submit our data to the backend
 let button = document.querySelector('#handle-submit');
 button.addEventListener('click', function() {
   handleSubmit();
 })
 
-let form = document.forms.menuForm
-
-// console.log('form el :', form.elements);
+let form = document.forms.menuForm // Grab form elements
 
 const handleSubmit = () => {
   console.log('handleSubmit', form.elements);
-  let obj = {};
-  let arr = [];
+  let obj = {
+    social: [],
+  };
+
   [...form.elements].forEach((input, index) => {
-      if(input.type === 'checkbox') {
-        obj[input.name] = input.checked
-      } else {
+      if(input.name.indexOf('URL') !== -1 && input.value.length) {
+        obj['social'].push({icon: input.name.slice(0,-3), link: input.value})
+      }
+      else if (input.type !== 'checkbox' && input.value.length) {
         obj[input.name] = input.value
       }
-
   })
-  console.log(obj, arr);
+  console.log(obj);
 }

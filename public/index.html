@@ -6,6 +6,7 @@
     <title></title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;600&display=swap" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 </head>
 <style>
     html {
@@ -86,25 +87,31 @@
 
         <div>
           <label for="facebook">Facebook?</label>
-          <input type="checkbox" name="facebook" value="facebook">
+          <input type="checkbox" name="facebook">
 
           <label for="linkedin">LinkedIn?</label>
-          <input type="checkbox" name="linkedin" value="linkedin">
+          <input type="checkbox" name="linkedin">
 
           <label for="twitter">Twitter?</label>
-          <input type="checkbox" name="twitter" value="twitter">
+          <input type="checkbox" name="twitter">
         </div>
       </div>
 
       <div>
-        <label for="fbURL">Facebook URL:</label>
-        <input type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
+        <div id="facebook" class="social-inputs">
+          <label for="fbURL">Facebook URL:</label>
+          <input type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
+        </div>
 
-        <label for="liURL">LinkedIn URL:</label>
-        <input type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
+        <div id="linkedin" class="social-inputs">
+          <label for="liURL">LinkedIn URL:</label>
+          <input type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
+        </div>
 
-        <label for="twitter">Twitter URL</label>
-        <input type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
+        <div id="twitter" class="social-inputs">
+          <label for="twitter">Twitter URL</label>
+          <input type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
+        </div>
       </div>
 
       <div id="handle-submit" class="submit-button">Submit</div>
