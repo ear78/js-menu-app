@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
-<head>
+  <head>
     <meta charset="utf-8">
     <title></title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;600&display=swap" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
-</head>
-<style>
+  </head>
+  <style>
     html {
       overflow: hidden;
     }
@@ -48,6 +48,14 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, .1);
       padding: 15px;
       margin: 0 15px 15px;
+    }
+
+    .item img {
+      width: 100%;
+      max-width: 65px;
+      padding: 5px;
+      border: 1px solid #ebebeb;
+      border-radius: 3px;
     }
 
     .item .title {
@@ -139,76 +147,76 @@
       border: none;
       color: #fff;
       border-radius: 3px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin: 15px 0;
     }
 
-</style>
+  </style>
 
-<body>
-  <section id="content-wrapper">
-    <div id="content"></div>
+  <body>
+    <section id="content-wrapper">
+      <div id="content"></div>
 
-    <form id="menu-form" name="menuForm">
-      <div class="row">
-        <div class="column">
-          <label for="title">Full Name:</label>
-          <input type="text" name="title" placeholder="Enter Full Name">
+      <form id="menu-form" name="menuForm" enctype="multipart/form-data">
+        <div class="row">
+          <div class="column">
+            <label for="title">Full Name:</label>
+            <input type="text" name="title" placeholder="Enter Full Name">
+          </div>
+
+          <div class="column">
+            <label for="subTitle">Position:</label>
+            <input type="text" name="subTitle" placeholder="Enter Position">
+          </div>
         </div>
 
-        <div class="column">
-          <label for="subTitle">Position:</label>
-          <input type="text" name="subTitle" placeholder="Enter Position">
-        </div>
-      </div>
-
-      <div>
         <div>
-          <label for="description">Description:</label>
-          <textarea rows="4" type="text" name="description" placeholder="Enter a Description"></textarea>
-        </div>
-      </div>
-
-      <div class="upload-button-wrapper">
-        <label class="upload-button" for="upload">Upload File</label>
-        <input id="upload" type="file" name="imgUpload" accept="image/jpeg,.jpg,.png">
-      </div>
-
-      <div class="social-section">
-        <h4>Social Media Links</h4>
-        <div class="checkboxes">
-          <label for="facebook">Facebook?</label>
-          <input type="checkbox" name="facebook">
-
-          <label for="linkedin">LinkedIn?</label>
-          <input type="checkbox" name="linkedin">
-
-          <label for="twitter">Twitter?</label>
-          <input type="checkbox" name="twitter">
+          <div>
+            <label for="description">Description:</label>
+            <textarea rows="4" type="text" name="description" placeholder="Enter a Description"></textarea>
+          </div>
         </div>
 
-        <div id="facebook" class="social-inputs">
-          <label for="fbURL">Facebook URL:</label>
-          <input type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
+        <div class="upload-button-wrapper">
+          <label class="upload-button" for="upload">Upload File</label>
+          <input id="upload" type="file" name="image" accept="image/jpeg,.jpg,.png">
         </div>
 
-        <div id="linkedin" class="social-inputs">
-          <label for="liURL">LinkedIn URL:</label>
-          <input type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
+        <div class="social-section">
+          <h4>Social Media Links</h4>
+          <div class="checkboxes">
+            <label for="facebook">Facebook?</label>
+            <input type="checkbox" name="facebook">
+
+            <label for="linkedin">LinkedIn?</label>
+            <input type="checkbox" name="linkedin">
+
+            <label for="twitter">Twitter?</label>
+            <input type="checkbox" name="twitter">
+          </div>
+
+          <div id="facebook" class="social-inputs">
+            <label for="fbURL">Facebook URL:</label>
+            <input type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
+          </div>
+
+          <div id="linkedin" class="social-inputs">
+            <label for="liURL">LinkedIn URL:</label>
+            <input type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
+          </div>
+
+          <div id="twitter" class="social-inputs">
+            <label for="twitter">Twitter URL</label>
+            <input type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
+          </div>
         </div>
 
-        <div id="twitter" class="social-inputs">
-          <label for="twitter">Twitter URL</label>
-          <input type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
-        </div>
-      </div>
+        <div id="handle-submit" class="submit-button">Submit</div>
+      </form>
+    </section>
+  </body>
 
-      <div id="handle-submit" class="submit-button">Submit</div>
-    </form>
-  </section>
-</body>
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type="text/javascript" src="./main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script type="text/javascript" src="./main.js"></script>
 
 </html>
