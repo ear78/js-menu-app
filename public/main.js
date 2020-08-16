@@ -90,9 +90,9 @@ const handleSubmit = () => {
       }
   })
   console.log(obj);
-  axios.post('http://localhost:5001/api/menu-items/', obj).then((resp) => {
-    console.log('response', resp);
-  }).catch((error) => {
-    console.log('error:', error);
-  })
+  // axios.post('http://localhost:5001/api/menu-items/', obj).then((resp) => {
+  //   console.log('response', resp);
+  // }).catch((error) => {
+  //   console.log('error:', error);
+  // })
 }
