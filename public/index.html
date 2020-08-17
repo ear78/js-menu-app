@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
-<head>
+  <head>
     <meta charset="utf-8">
     <title></title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;600&display=swap" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
-</head>
-<style>
+  </head>
+  <style>
     html {
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     body,
@@ -33,13 +33,92 @@
       margin: 0 0 8px;
     }
 
+    a i {
+      transition: all .2s ease;
+    }
+
+    a i:hover {
+      transform: scale(1.2)
+    }
+
+    #content {
+      position: relative;
+      width: 50%;
+    }
+
+    .content-loading {
+      position: absolute;
+      display: flex;
+      background: black;
+      width: 100%;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Loading spinner */
+    .lds-ring {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .lds-ring div {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 64px;
+      height: 64px;
+      margin: 8px;
+      border: 3px solid deepskyblue;
+      border-radius: 50%;
+      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: deepskyblue transparent transparent transparent;
+    }
+
+    .lds-ring div:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+
+    .lds-ring div:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+
+    .lds-ring div:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+
+    @keyframes lds-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    header {
+      background: deepskyblue;
+      color: white;
+      padding: 15px;
+    }
+
+    header span {
+      margin-left: 4px;
+    }
+
     #content-wrapper {
       display: flex;
+      padding-top: 30px;
     }
 
     .items-wrapper {
       display: flex;
       flex-direction: column;
+      max-height: 85vh;
+      overflow-y: auto;
     }
 
     .item {
@@ -48,6 +127,21 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, .1);
       padding: 15px;
       margin: 0 15px 15px;
+      transition: all .275s ease;
+    }
+
+    .item:hover {
+      cursor: pointer;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, .3);
+      transform: translateY(-3px);
+    }
+
+    .item img {
+      width: 100%;
+      max-width: 65px;
+      padding: 5px;
+      border: 1px solid #ebebeb;
+      border-radius: 3px;
     }
 
     .item .title {
@@ -60,6 +154,10 @@
       text-transform: uppercase;
       font-size: .75em;
       margin-top: 0;
+    }
+
+    .item .social-box a {
+      padding: 5px 5px 3px 0;
     }
 
     #menu-form {
@@ -139,76 +237,97 @@
       border: none;
       color: #fff;
       border-radius: 3px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin: 15px 0;
+      transition: all .275s ease;
     }
 
-</style>
+    button:hover {
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, .4);
+      transform: translateY(-3px);
+    }
 
-<body>
-  <section id="content-wrapper">
-    <div id="content"></div>
+  </style>
 
-    <form id="menu-form" name="menuForm">
-      <div class="row">
-        <div class="column">
-          <label for="title">Full Name:</label>
-          <input type="text" name="title" placeholder="Enter Full Name">
-        </div>
+  <body>
+    <header>
+      <i class="fa fa-ravelry" aria-hidden="true"></i><span>User Profile</span>
+    </header>
 
-        <div class="column">
-          <label for="subTitle">Position:</label>
-          <input type="text" name="subTitle" placeholder="Enter Position">
+    <section id="content-wrapper">
+      <div id="content">
+        <div class="content-loading">
+          <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+
         </div>
       </div>
 
-      <div>
+      <form id="menu-form" name="menuForm" enctype="multipart/form-data">
+        <div class="row">
+          <div class="column">
+            <label for="title">Full Name:</label>
+            <input type="text" name="title" placeholder="Enter Full Name">
+          </div>
+
+          <div class="column">
+            <label for="subTitle">Position:</label>
+            <input type="text" name="subTitle" placeholder="Enter Position">
+          </div>
+        </div>
+
         <div>
-          <label for="description">Description:</label>
-          <textarea rows="4" type="text" name="description" placeholder="Enter a Description"></textarea>
-        </div>
-      </div>
-
-      <div class="upload-button-wrapper">
-        <label class="upload-button" for="upload">Upload File</label>
-        <input id="upload" type="file" name="imgUpload" accept="image/jpeg,.jpg,.png">
-      </div>
-
-      <div class="social-section">
-        <h4>Social Media Links</h4>
-        <div class="checkboxes">
-          <label for="facebook">Facebook?</label>
-          <input type="checkbox" name="facebook">
-
-          <label for="linkedin">LinkedIn?</label>
-          <input type="checkbox" name="linkedin">
-
-          <label for="twitter">Twitter?</label>
-          <input type="checkbox" name="twitter">
+          <div>
+            <label for="description">Description:</label>
+            <textarea rows="4" type="text" name="description" placeholder="Enter a Description"></textarea>
+          </div>
         </div>
 
-        <div id="facebook" class="social-inputs">
-          <label for="fbURL">Facebook URL:</label>
-          <input type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
+        <div class="upload-button-wrapper">
+          <label class="upload-button" for="upload">Upload File</label>
+          <input id="upload" type="file" name="image" accept="image/jpeg,.jpg,.png">
         </div>
 
-        <div id="linkedin" class="social-inputs">
-          <label for="liURL">LinkedIn URL:</label>
-          <input type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
+        <div class="social-section">
+          <h4>Social Media Links</h4>
+          <div class="checkboxes">
+            <label for="facebook">Facebook?</label>
+            <input type="checkbox" name="facebook">
+
+            <label for="linkedin">LinkedIn?</label>
+            <input type="checkbox" name="linkedin">
+
+            <label for="twitter">Twitter?</label>
+            <input type="checkbox" name="twitter">
+          </div>
+
+          <div id="facebook" class="social-inputs">
+            <label for="fbURL">Facebook URL:</label>
+            <input type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
+          </div>
+
+          <div id="linkedin" class="social-inputs">
+            <label for="liURL">LinkedIn URL:</label>
+            <input type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
+          </div>
+
+          <div id="twitter" class="social-inputs">
+            <label for="twitter">Twitter URL</label>
+            <input type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
+          </div>
         </div>
 
-        <div id="twitter" class="social-inputs">
-          <label for="twitter">Twitter URL</label>
-          <input type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
-        </div>
-      </div>
+        <button type="submit" id="handle-submit" class="submit-button">Submit</button>
+      </form>
+    </section>
+  </body>
 
-      <div id="handle-submit" class="submit-button">Submit</div>
-    </form>
-  </section>
-</body>
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script type="text/javascript" src="./main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script type="text/javascript" src="./main.js"></script>
 
 </html>
