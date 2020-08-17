@@ -25,8 +25,8 @@ router.post( '/', async ( req, res ) => {
     date: new Date()
   }
 
-  await menuItems.insertOne( item );
-  res.status(201).send();
+  await menuItems.insertOne(item);
+  res.status(201).send(await menuItems.find().toArray());
 })
 
 // Delete Menu Item

@@ -1,5 +1,5 @@
 
-// Let's Grab the Data from the backend
+// Let's Grab the Data from the backend on page load
 let url = 'http://localhost:5001/api/menu-items/'
 
 fetch( url )
@@ -10,13 +10,25 @@ fetch( url )
     console.log( 'd', d );
     if(d) {
       addPageContent(d);
+      handleDataLoading(false);
     }
   })
-
 })
+
+const handleDataLoading = (bool) => {
+  let contentLoading = document.querySelector('.content-loading');
+  if(!bool) {
+    contentLoading.style.display = 'none';
+  } else {
+    contentLoading.style.display = 'flex';
+  }
+}
 
 // Let's print the data dynamically to the browser
 function addPageContent( data ) {
+  if(document.querySelector('.items-wrapper') !== null) {
+    document.querySelector('.items-wrapper').remove();
+  }
   var newDiv = document.createElement( 'div' );
   var att = document.createAttribute( 'class' );
   att.value = 'items-wrapper';
@@ -68,14 +80,16 @@ checkBoxes.forEach(box => {
 
 // Let's submit our data to the backend
 let button = document.querySelector('#handle-submit');
-button.addEventListener('click', function() {
+button.addEventListener('click', function(e) {
+  e.preventDefault()
   handleSubmit();
 })
 
-let form = document.forms.menuForm // Grab form elements
-
 const handleSubmit = () => {
-  console.log('handleSubmit', form.elements);
+  // console.log('handleSubmit', form.elements);
+  handleDataLoading(true)
+  let form = document.forms.menuForm // Grab form elements
+
   let obj = {
     social: [],
   };
@@ -97,11 +111,16 @@ const handleSubmit = () => {
     obj.image = imageFile64;
     postRequest(); // When image is base64 send postRequest
   }
-  reader.readAsDataURL(file)
+  if(file) {
+    reader.readAsDataURL(file)
+  }
 
   const postRequest = () => {
     axios.post('http://localhost:5001/api/menu-items/', obj).then((resp) => {
       console.log('response', resp);
+      let data = resp.data
+      addPageContent(data)
+      handleDataLoading(false);
     }).catch((error) => {
       console.log('error:', error);
     })
