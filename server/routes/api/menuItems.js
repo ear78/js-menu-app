@@ -14,7 +14,7 @@ router.get( '/', async ( req, res ) => {
 
 // Add menuItems
 router.post( '/', async ( req, res ) => {
-  const menuItems = await loadMenuItems();
+  const menuItem = await loadMenuItems();
 
   let item = {
     title: req.body.title,
@@ -25,17 +25,17 @@ router.post( '/', async ( req, res ) => {
     date: new Date()
   }
 
-  await menuItems.insertOne(item);
-  res.status(201).send(await menuItems.find().toArray());
+  await menuItem.insertOne(item);
+  res.status(201).send(await menuItem.find().toArray());
 })
 
 // Delete Menu Item
-router.delete( '/:id', async ( req, res ) => {
+router.delete( '/:id', async ( req, res, next ) => {
   const menuItem = await loadMenuItems();
   await menuItem.deleteOne( {
     _id: new mongodb.ObjectID( req.params.id )
   } );
-  res.status(200).send();
+  res.status(200).send(await menuItem.find().toArray());
 })
 
 // Update Menu item
