@@ -54,6 +54,7 @@
       height: 100vh;
       justify-content: center;
       align-items: center;
+      z-index: 1;
     }
 
     /* Loading spinner */
@@ -119,9 +120,11 @@
       flex-direction: column;
       max-height: 85vh;
       overflow-y: auto;
+      z-index: 0;
     }
 
     .item {
+      position: relative;
       border: 1px solid #ebebeb;
       border-radius: 3px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, .1);
@@ -158,6 +161,13 @@
 
     .item .social-box a {
       padding: 5px 5px 3px 0;
+    }
+
+    .item button {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      margin: 0;
     }
 
     #menu-form {
@@ -231,7 +241,7 @@
       margin-bottom: 0;
     }
 
-    button {
+    .btn {
       padding: 10px 32px;
       background: #000;
       border: none;
@@ -242,10 +252,25 @@
       transition: all .275s ease;
     }
 
-    button:hover {
+    .btn:hover {
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0, 0, 0, .4);
       transform: translateY(-3px);
+    }
+
+    .btn.btn--primary {
+      background: #000;
+    }
+
+    .btn.btn--delete {
+      padding: 6px 16px;
+      font-size: .75rem;
+      opacity: .7;
+      transition: all .2s ease;
+    }
+
+    .btn.btn--delete:hover {
+      opacity: 1;
     }
 
   </style>
@@ -322,7 +347,7 @@
           </div>
         </div>
 
-        <button type="submit" id="handle-submit" class="submit-button">Submit</button>
+        <button type="submit" id="handle-submit" class="btn submit-button">Submit</button>
       </form>
     </section>
   </body>

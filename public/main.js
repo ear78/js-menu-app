@@ -1,16 +1,16 @@
 
 // Let's Grab the Data from the backend on page load
-let url = 'http://localhost:5001/api/menu-items/'
+const URL = 'http://localhost:5001/api/menu-items/'
 
-fetch( url )
+fetch( URL )
 .then( resp => {
-  console.log( 'resp :', resp );
   let data = resp.json()
   data.then(d => {
     console.log( 'd', d );
     if(d) {
       addPageContent(d);
       handleDataLoading(false);
+      getDeleteButtons();
     }
   })
 })
@@ -34,9 +34,10 @@ function addPageContent( data ) {
   att.value = 'items-wrapper';
   newDiv.setAttributeNode( att )
 
-  var content = data.map( item => {
+  var content = data.map((item, index) => {
     return `<div class="item">
     <img src="${item.image}"/>
+    <button id="${item._id}" class="btn btn--delete" type="button">Delete</button>
     <h4 class="title">${item.title}</h4>
     <p class="sub-title">${item.subTitle}</p>
     <p class="description">${item.description}</p>
@@ -53,8 +54,8 @@ document.getElementById( 'content').appendChild( newDiv )
 }
 
 // Show/Hide social html text inputs
-let x = document.querySelectorAll('.social-inputs');
-x.forEach(input => input.style.display = 'none'); // hide inputs initially
+let socialInputs = document.querySelectorAll('.social-inputs');
+socialInputs.forEach(input => input.style.display = 'none'); // hide inputs initially
 
 const handleSocialInput = (check, name) => {
   let socialNames = ['facebook', 'linkedin', 'twitter', 'instagram']
@@ -78,10 +79,13 @@ checkBoxes.forEach(box => {
   })
 })
 
-// Let's submit our data to the backend
+/*
+* Let's Create and submit our data to the backend
+*/
 let button = document.querySelector('#handle-submit');
 button.addEventListener('click', function(e) {
   e.preventDefault()
+  e.stopPropagation();
   handleSubmit();
 })
 
@@ -115,9 +119,9 @@ const handleSubmit = () => {
     reader.readAsDataURL(file)
   }
 
+  // Create ajax call to backend
   const postRequest = () => {
-    axios.post('http://localhost:5001/api/menu-items/', obj).then((resp) => {
-      console.log('response', resp);
+    axios.post(URL, obj).then((resp) => {
       let data = resp.data
       addPageContent(data)
       handleDataLoading(false);
@@ -125,4 +129,30 @@ const handleSubmit = () => {
       console.log('error:', error);
     })
   }
+}
+
+// Delete handlers for all delete buttons
+const getDeleteButtons = () => {
+  let deleteButtons = document.querySelectorAll('.item button');
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation();
+      let id = e.target.id
+      handleDelete(id)
+    })
+  })
+}
+
+// Delete ajax call to backend
+const handleDelete = (id) => {
+  handleDataLoading(true);
+
+  axios.delete(URL + id).then((resp) => {
+    let data = resp.data
+    addPageContent(data)
+    handleDataLoading(false)
+    getDeleteButtons()
+  }).catch((error) => {
+    console.log('error:', error)
+  })
 }
