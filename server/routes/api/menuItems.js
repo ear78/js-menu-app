@@ -45,10 +45,15 @@ router.put( '/:id', async ( req, res ) => {
     _id: new mongodb.ObjectID( req.params.id )
   }, {
     $set: {
-      text: req.body.text
+      title: req.body.title,
+      subTitle: req.body.subTitle,
+      description: req.body.description,
+      social: req.body.social,
+      image: req.body.image,
+      date: new Date()
     }
   })
-  res.status(200).send()
+  res.status(200).send(await menuItem.find().toArray());
 })
 
 // connection string

@@ -57,6 +57,17 @@
       z-index: 1;
     }
 
+    /* .edit-loading {
+      position: absolute;
+      display: flex;
+      background: black;
+      width: 100%;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    } */
+
     /* Loading spinner */
     .lds-ring {
       display: inline-block;
@@ -145,6 +156,11 @@
       padding: 5px;
       border: 1px solid #ebebeb;
       border-radius: 3px;
+    }
+
+    .item .top-section {
+      display: flex;
+      justify-content: space-between;
     }
 
     .item .title {
@@ -289,66 +305,67 @@
             <div></div>
             <div></div>
           </div>
-
         </div>
       </div>
 
-      <form id="menu-form" name="menuForm" enctype="multipart/form-data">
-        <div class="row">
-          <div class="column">
-            <label for="title">Full Name:</label>
-            <input type="text" name="title" placeholder="Enter Full Name">
+      <div id="edit-wrapper">
+        <form id="menu-form" name="menuForm" enctype="multipart/form-data">
+          <div class="row">
+            <div class="column">
+              <label for="title">Full Name:</label>
+              <input type="text" name="title" placeholder="Enter Full Name">
+            </div>
+
+            <div class="column">
+              <label for="subTitle">Position:</label>
+              <input type="text" name="subTitle" placeholder="Enter Position">
+            </div>
           </div>
 
-          <div class="column">
-            <label for="subTitle">Position:</label>
-            <input type="text" name="subTitle" placeholder="Enter Position">
-          </div>
-        </div>
-
-        <div>
           <div>
-            <label for="description">Description:</label>
-            <textarea rows="4" type="text" name="description" placeholder="Enter a Description"></textarea>
-          </div>
-        </div>
-
-        <div class="upload-button-wrapper">
-          <label class="upload-button" for="upload">Upload File</label>
-          <input id="upload" type="file" name="image" accept="image/jpeg,.jpg,.png">
-        </div>
-
-        <div class="social-section">
-          <h4>Social Media Links</h4>
-          <div class="checkboxes">
-            <label for="facebook">Facebook?</label>
-            <input type="checkbox" name="facebook">
-
-            <label for="linkedin">LinkedIn?</label>
-            <input type="checkbox" name="linkedin">
-
-            <label for="twitter">Twitter?</label>
-            <input type="checkbox" name="twitter">
+            <div>
+              <label for="description">Description:</label>
+              <textarea rows="4" type="text" name="description" placeholder="Enter a Description"></textarea>
+            </div>
           </div>
 
-          <div id="facebook" class="social-inputs">
-            <label for="fbURL">Facebook URL:</label>
-            <input type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
+          <div class="upload-button-wrapper">
+            <label class="upload-button" for="upload">Upload File</label>
+            <input id="upload" type="file" name="image" accept="image/jpeg,.jpg,.png">
           </div>
 
-          <div id="linkedin" class="social-inputs">
-            <label for="liURL">LinkedIn URL:</label>
-            <input type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
+          <div class="social-section">
+            <h4>Social Media Links</h4>
+            <div class="checkboxes">
+              <label for="facebook">Facebook?</label>
+              <input type="checkbox" name="facebook">
+
+              <label for="linkedin">LinkedIn?</label>
+              <input type="checkbox" name="linkedin">
+
+              <label for="twitter">Twitter?</label>
+              <input type="checkbox" name="twitter">
+            </div>
+
+            <div id="facebook" class="social-inputs">
+              <label for="fbURL">Facebook URL:</label>
+              <input type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
+            </div>
+
+            <div id="linkedin" class="social-inputs">
+              <label for="liURL">LinkedIn URL:</label>
+              <input type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
+            </div>
+
+            <div id="twitter" class="social-inputs">
+              <label for="twitter">Twitter URL</label>
+              <input type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
+            </div>
           </div>
 
-          <div id="twitter" class="social-inputs">
-            <label for="twitter">Twitter URL</label>
-            <input type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
-          </div>
-        </div>
-
-        <button type="submit" id="handle-submit" class="btn submit-button">Submit</button>
-      </form>
+          <button type="submit" id="handle-submit" class="btn submit-button">Submit</button>
+        </form>
+      </div>
     </section>
   </body>
 

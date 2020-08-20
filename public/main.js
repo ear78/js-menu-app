@@ -1,6 +1,8 @@
 
 // Let's Grab the Data from the backend on page load
-const URL = 'http://localhost:5001/api/menu-items/'
+const URL = 'http://localhost:5001/api/menu-items/';
+let dataState = []
+let isEditing = false;
 
 fetch( URL )
 .then( resp => {
@@ -8,18 +10,20 @@ fetch( URL )
   data.then(d => {
     console.log( 'd', d );
     if(d) {
+      dataState = [...d]
       addPageContent(d);
-      handleDataLoading(false);
-      getDeleteButtons();
+      handleDataLoading('load', false);
+      getActionButtons(); // get buttons after data/content is set
     }
   })
 })
 
-const handleDataLoading = (bool) => {
+const handleDataLoading = (type, bool) => {
   let contentLoading = document.querySelector('.content-loading');
-  if(!bool) {
+  if(!bool && type === 'load') {
     contentLoading.style.display = 'none';
-  } else {
+  }
+  else if(bool && type === 'load') {
     contentLoading.style.display = 'flex';
   }
 }
@@ -35,9 +39,14 @@ function addPageContent( data ) {
   newDiv.setAttributeNode( att )
 
   var content = data.map((item, index) => {
-    return `<div class="item">
-    <img src="${item.image}"/>
-    <button id="${item._id}" class="btn btn--delete" type="button">Delete</button>
+    return `<div id="${item._id}" class="item">
+    <div class="top-section">
+      <img src="${item.image}"/>
+      <div class="functions">
+        <i class="fa fa-pencil-square-o edit" aria-hidden="true"></i>
+        <i class="fa fa-trash delete" aria-hidden="true"></i>
+      </div>
+    </div>
     <h4 class="title">${item.title}</h4>
     <p class="sub-title">${item.subTitle}</p>
     <p class="description">${item.description}</p>
@@ -79,9 +88,7 @@ checkBoxes.forEach(box => {
   })
 })
 
-/*
-* Let's Create and submit our data to the backend
-*/
+//Let's Create/Edit and submit our data to the backend
 let button = document.querySelector('#handle-submit');
 button.addEventListener('click', function(e) {
   e.preventDefault()
@@ -91,7 +98,7 @@ button.addEventListener('click', function(e) {
 
 const handleSubmit = () => {
   // console.log('handleSubmit', form.elements);
-  handleDataLoading(true)
+  handleDataLoading('load', true)
   let form = document.forms.menuForm // Grab form elements
 
   let obj = {
@@ -119,40 +126,101 @@ const handleSubmit = () => {
     reader.readAsDataURL(file)
   }
 
-  // Create ajax call to backend
-  const postRequest = () => {
-    axios.post(URL, obj).then((resp) => {
-      let data = resp.data
-      addPageContent(data)
-      handleDataLoading(false);
-    }).catch((error) => {
-      console.log('error:', error);
-    })
+  if(isEditing) {
+    const editRequest = () => {
+      axios.put(URL + id).then(resp => {
+        let data = resp.data
+        dataState = [...data]
+        addPageContent(data)
+        handleDataLoading('load', false)
+      }).catch(error => {
+        console.log('error:', error)
+      })
+    }
+  }
+
+  if(!isEditing) {
+    // Create ajax call to backend
+    const postRequest = () => {
+      axios.post(URL, obj).then((resp) => {
+        let data = resp.data
+        dataState = [...data]
+        addPageContent(data)
+        handleDataLoading('load', false);
+      }).catch((error) => {
+        console.log('error:', error);
+      })
+    }
   }
 }
 
 // Delete handlers for all delete buttons
-const getDeleteButtons = () => {
-  let deleteButtons = document.querySelectorAll('.item button');
+const getActionButtons = () => {
+  let deleteButtons = document.querySelectorAll('.item .delete');
   deleteButtons.forEach(button => {
     button.addEventListener('click', function(e) {
       e.stopPropagation();
-      let id = e.target.id
+      let id = e.target.offsetParent.id
       handleDelete(id)
+    })
+  })
+
+  let editButtons = document.querySelectorAll('.item .edit');
+  editButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation();
+      let id = e.target.offsetParent.id;
+      handleEdit(id);
     })
   })
 }
 
 // Delete ajax call to backend
 const handleDelete = (id) => {
-  handleDataLoading(true);
+  handleDataLoading('load', true);
 
   axios.delete(URL + id).then((resp) => {
     let data = resp.data
+    dataState = [...data] //update app data
     addPageContent(data)
-    handleDataLoading(false)
-    getDeleteButtons()
+    handleDataLoading('load', false)
+    getActionButtons()
   }).catch((error) => {
     console.log('error:', error)
   })
+}
+
+// Edit ajax call to backend
+const handleEdit = (id) => {
+  handleDataLoading('edit', true)
+  isEditing = true;
+  console.log(dataState);
+  let card = dataState.find(data => data._id === id)
+  let titleEl = document.querySelector('#menu-form input[name="title"]');
+  let subTitleEl = document.querySelector('#menu-form input[name="subTitle"]');
+  let descriptionEl = document.querySelector('#menu-form textarea[name="description"]');
+  // let imageEl = document.querySelector('#menu-form input[name="image"]');
+  let facebookEl = document.querySelector('#menu-form input[name="facebook"]');
+  let linkedinEl = document.querySelector('#menu-form input[name="linkedin"]');
+  let twitterEl = document.querySelector('#menu-form input[name="twitter"]');
+  titleEl.value = card.title;
+  subTitleEl.value = card.subTitle;
+  descriptionEl.value = card.description;
+  // imageEl.value = card.image;
+
+  if(card.social[0]) {
+    facebookEl.click()
+    document.querySelector('input[name="facebookURL"]').value = card.social[0].link
+  }
+  if(card.social[1]) {
+    linkedinEl.click()
+    document.querySelector('input[name="linkedinURL"]').value = card.social[1].link
+  }
+  if(card.social[2]) {
+    twitterEl.click()
+    document.querySelector('input[name="twitterURL"]').value = card.social[2].link
+  }
+
+
+
 }
