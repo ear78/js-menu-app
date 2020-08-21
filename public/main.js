@@ -29,7 +29,7 @@ const handleDataLoading = (type, bool) => {
 }
 
 // Let's print the data dynamically to the browser
-function addPageContent( data ) {
+const addPageContent = (data) => {
   if(document.querySelector('.items-wrapper') !== null) {
     document.querySelector('.items-wrapper').remove();
   }
@@ -62,22 +62,6 @@ newDiv.innerHTML = content;
 document.getElementById( 'content').appendChild( newDiv )
 }
 
-// Show/Hide social html text inputs
-let socialInputs = document.querySelectorAll('.social-inputs');
-socialInputs.forEach(input => input.style.display = 'none'); // hide inputs initially
-
-const handleSocialInput = (check, name) => {
-  let socialNames = ['facebook', 'linkedin', 'twitter', 'instagram']
-  socialNames.forEach(socialName => {
-    if(check && name === socialName) {
-      document.querySelector(`#${name}`).style.display = 'block'
-    }
-    if(!check && name === socialName) {
-      document.querySelector(`#${name}`).style.display = 'none'
-    }
-  })
-}
-
 // Let's add click handlers to our checkboxes
 let checkBoxes = document.querySelectorAll('input[type="checkbox"]');
 checkBoxes.forEach(box => {
@@ -96,6 +80,26 @@ button.addEventListener('click', function(e) {
   handleSubmit();
 })
 
+// Show/Hide social html text inputs
+const hideSocialInputs = () => {
+  let socialInputs = document.querySelectorAll('.social-inputs');
+  socialInputs.forEach(input => input.style.display = 'none'); // hide inputs initially
+}
+hideSocialInputs() // hide inputs on initial load 
+
+const handleSocialInput = (check, name) => {
+  let socialNames = ['facebook', 'linkedin', 'twitter', 'instagram']
+  socialNames.forEach(socialName => {
+    if(check && name === socialName) {
+      document.querySelector(`#${name}`).style.display = 'block'
+    }
+    if(!check && name === socialName) {
+      document.querySelector(`#${name}`).style.display = 'none'
+    }
+  })
+}
+
+// Handle Submit of form to backend
 const handleSubmit = () => {
   // console.log('handleSubmit', form.elements);
   handleDataLoading('load', true)
@@ -195,6 +199,31 @@ const handleEdit = (id) => {
   handleDataLoading('edit', true)
   isEditing = true;
   console.log(dataState);
+
+  // Open mask
+  let editMask = document.querySelector('.edit-mask');
+  editMask.classList.add('active');
+
+  // Set User Text
+  let formTitle = document.querySelector('.form-title')
+  formTitle.innerHTML = 'Edit User';
+
+  // Create Reset Button
+  let reset = document.createElement('input');
+  reset.setAttribute('type', 'reset');
+  reset.value = 'Cancel';
+  formTitle.appendChild(reset)
+
+  let resetButton = document.querySelector('input[type="reset"]')
+  resetButton.addEventListener('click', function () {
+    hideSocialInputs()
+    editMask.classList.remove('active')
+    formTitle.innerHTML = 'Add User'
+    reset.remove()
+    document.querySelector('#menu-form').reset()
+  })
+
+  // Form data
   let card = dataState.find(data => data._id === id)
   let titleEl = document.querySelector('#menu-form input[name="title"]');
   let subTitleEl = document.querySelector('#menu-form input[name="subTitle"]');
