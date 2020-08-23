@@ -3,6 +3,7 @@
 const URL = 'http://localhost:5001/api/menu-items/';
 let dataState = []
 let isEditing = false;
+let stateId = '';
 
 fetch( URL )
 .then( resp => {
@@ -18,6 +19,7 @@ fetch( URL )
   })
 })
 
+// Sets Loading Spinner
 const handleDataLoading = (type, bool) => {
   let contentLoading = document.querySelector('.content-loading');
   if(!bool && type === 'load') {
@@ -40,22 +42,22 @@ const addPageContent = (data) => {
 
   var content = data.map((item, index) => {
     return `<div id="${item._id}" class="item">
-    <div class="top-section">
-      <img src="${item.image}"/>
-      <div class="functions">
-        <i class="fa fa-pencil-square-o edit" aria-hidden="true"></i>
-        <i class="fa fa-trash delete" aria-hidden="true"></i>
-      </div>
-    </div>
-    <h4 class="title">${item.title}</h4>
-    <p class="sub-title">${item.subTitle}</p>
-    <p class="description">${item.description}</p>
-    <div class="social-box">
-      ${item.social.map(link => {
-        return `<a href="${link.link}"><i class="fa fa-${link.icon}" aria-hidden="true"></i></a>`
-      }).join(' ')}
-    </div>
-  </div>`;
+              <div class="top-section">
+                <img src="${item.image}"/>
+                <div class="functions">
+                  <i class="fa fa-pencil-square-o edit" aria-hidden="true"></i>
+                  <i class="fa fa-trash delete" aria-hidden="true"></i>
+                </div>
+              </div>
+              <h4 class="title">${item.title}</h4>
+              <p class="sub-title">${item.subTitle}</p>
+              <p class="description">${item.description}</p>
+              <div class="social-box">
+                ${item.social.map(link => {
+                  return `<a href="${link.link}"><i class="fa fa-${link.icon}" aria-hidden="true"></i></a>`
+                }).join(' ')}
+              </div>
+            </div>`;
 }).join( '' )
 
 newDiv.innerHTML = content;
@@ -85,7 +87,7 @@ const hideSocialInputs = () => {
   let socialInputs = document.querySelectorAll('.social-inputs');
   socialInputs.forEach(input => input.style.display = 'none'); // hide inputs initially
 }
-hideSocialInputs() // hide inputs on initial load 
+hideSocialInputs() // hide inputs on initial load
 
 const handleSocialInput = (check, name) => {
   let socialNames = ['facebook', 'linkedin', 'twitter', 'instagram']
@@ -99,17 +101,18 @@ const handleSocialInput = (check, name) => {
   })
 }
 
-// Handle Submit of form to backend
+// Handle Submit of form to backend. Handles create and edit
 const handleSubmit = () => {
-  // console.log('handleSubmit', form.elements);
   handleDataLoading('load', true)
+
   let form = document.forms.menuForm // Grab form elements
+  let elements = [...form.elements]
 
   let obj = {
     social: [],
   };
 
-  [...form.elements].forEach((input, index) => {
+  elements.forEach((input, index) => {
       if(input.name.indexOf('URL') !== -1 && input.value.length) {
         obj['social'].push({icon: input.name.slice(0,-3), link: input.value})
       }
@@ -131,8 +134,12 @@ const handleSubmit = () => {
   }
 
   if(isEditing) {
-    const editRequest = () => {
-      axios.put(URL + id).then(resp => {
+    // if(!file.length) {
+    //   let group = dataState.find(data => data._id === id)
+    //   obj.image = group.image
+    // }
+    console.log(URL + stateId);
+      axios.put(URL + stateId, obj).then(resp => {
         let data = resp.data
         dataState = [...data]
         addPageContent(data)
@@ -140,7 +147,6 @@ const handleSubmit = () => {
       }).catch(error => {
         console.log('error:', error)
       })
-    }
   }
 
   if(!isEditing) {
@@ -194,11 +200,12 @@ const handleDelete = (id) => {
   })
 }
 
-// Edit ajax call to backend
+// Edit form functionality
 const handleEdit = (id) => {
+  // Set loading, isEditing, id
   handleDataLoading('edit', true)
   isEditing = true;
-  console.log(dataState);
+  stateId = id
 
   // Open mask
   let editMask = document.querySelector('.edit-mask');
@@ -214,8 +221,11 @@ const handleEdit = (id) => {
   reset.value = 'Cancel';
   formTitle.appendChild(reset)
 
+  // Resets form
   let resetButton = document.querySelector('input[type="reset"]')
   resetButton.addEventListener('click', function () {
+    isEditing = false
+    id = ''
     hideSocialInputs()
     editMask.classList.remove('active')
     formTitle.innerHTML = 'Add User'
@@ -224,32 +234,31 @@ const handleEdit = (id) => {
   })
 
   // Form data
+  let form = document.forms.menuForm
   let card = dataState.find(data => data._id === id)
-  let titleEl = document.querySelector('#menu-form input[name="title"]');
-  let subTitleEl = document.querySelector('#menu-form input[name="subTitle"]');
-  let descriptionEl = document.querySelector('#menu-form textarea[name="description"]');
-  // let imageEl = document.querySelector('#menu-form input[name="image"]');
-  let facebookEl = document.querySelector('#menu-form input[name="facebook"]');
-  let linkedinEl = document.querySelector('#menu-form input[name="linkedin"]');
-  let twitterEl = document.querySelector('#menu-form input[name="twitter"]');
-  titleEl.value = card.title;
-  subTitleEl.value = card.subTitle;
-  descriptionEl.value = card.description;
-  // imageEl.value = card.image;
 
-  if(card.social[0]) {
-    facebookEl.click()
-    document.querySelector('input[name="facebookURL"]').value = card.social[0].link
-  }
-  if(card.social[1]) {
-    linkedinEl.click()
-    document.querySelector('input[name="linkedinURL"]').value = card.social[1].link
-  }
-  if(card.social[2]) {
-    twitterEl.click()
-    document.querySelector('input[name="twitterURL"]').value = card.social[2].link
-  }
-
-
-
+  let elements = [...form.elements]
+  elements.forEach(element => {
+    if(element.name === 'title') {
+      element.value = card.title;
+    }
+    if(element.name === 'subTitle') {
+      element.value = card.subTitle
+    }
+    if(element.name === 'description') {
+      element.value = card.description
+    }
+    if(element.name === 'facebook' && card.social[0]) {
+      element.click()
+      document.querySelector('input[name="facebookURL"]').value = card.social[0].link
+    }
+    if(element.name === 'linkedin' && card.social[1]) {
+      element.click()
+      document.querySelector('input[name="linkedinURL"]').value = card.social[1].link
+    }
+    if(element.name === 'twitter' && card.social[2]) {
+      element.click()
+      document.querySelector('input[name="twitterURL"]').value = card.social[2].link
+    }
+  })
 }
