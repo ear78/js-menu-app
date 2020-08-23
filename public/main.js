@@ -104,7 +104,7 @@ const handleSocialInput = (check, name) => {
 // Handle Submit of form to backend. Handles create and edit
 const handleSubmit = () => {
   handleDataLoading('load', true)
-
+  let postRequest
   let form = document.forms.menuForm // Grab form elements
   let elements = [...form.elements]
 
@@ -138,7 +138,8 @@ const handleSubmit = () => {
     //   let group = dataState.find(data => data._id === id)
     //   obj.image = group.image
     // }
-    console.log(URL + stateId);
+    console.log(URL + stateId, obj);
+    postRequest = () => {
       axios.put(URL + stateId, obj).then(resp => {
         let data = resp.data
         dataState = [...data]
@@ -147,11 +148,12 @@ const handleSubmit = () => {
       }).catch(error => {
         console.log('error:', error)
       })
+    }
   }
 
   if(!isEditing) {
     // Create ajax call to backend
-    const postRequest = () => {
+    postRequest = () => {
       axios.post(URL, obj).then((resp) => {
         let data = resp.data
         dataState = [...data]
