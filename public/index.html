@@ -29,6 +29,10 @@
       color: deepskyblue;
     }
 
+    h3 {
+      padding: 0 15px;
+    }
+
     h4 {
       margin: 0 0 8px;
     }
@@ -44,6 +48,7 @@
     #content {
       position: relative;
       width: 50%;
+      padding-top: 20px;
     }
 
     .content-loading {
@@ -55,6 +60,7 @@
       justify-content: center;
       align-items: center;
       z-index: 1;
+      top: 0;
     }
 
     /* Loading spinner */
@@ -112,7 +118,7 @@
 
     #content-wrapper {
       display: flex;
-      padding-top: 30px;
+      /* padding-top: 30px; */
     }
 
     .items-wrapper {
@@ -147,6 +153,11 @@
       border-radius: 3px;
     }
 
+    .item .top-section {
+      display: flex;
+      justify-content: space-between;
+    }
+
     .item .title {
       font-size: 1.25rem;
       margin: 0;
@@ -170,30 +181,52 @@
       margin: 0;
     }
 
-    #menu-form {
+    #form-wrapper {
+      max-height: 85vh;
+      overflow-y: auto;
+      padding-top: 20px;
+    }
+
+    #form-wrapper input[type="reset"] {
+      margin-left: 10px;
+      vertical-align: middle;
+      border: none;
+      padding: 5px 15px;
+      border-radius: 3px;
+      background: #f3f3f3;
+    }
+
+    #menu-form,
+    #edit-form {
       padding: 15px;
     }
 
-    #menu-form .row {
+    #menu-form .row,
+    #edit-form .row {
       display: flex;
     }
 
-    #menu-form .column:first-child {
+    #menu-form .column:first-child,
+    #edit-form .column:first-child {
       padding-right: 15px;
     }
 
+    #menu-form .column,
     #menu-form .column {
       width: 50%;
     }
 
-    #menu-form label {
+    #menu-form label,
+    #edit-form label {
       color: #757575;
       margin-bottom: 5px;
       display: inline-block;
     }
 
     #menu-form input[type="text"],
-    #menu-form textarea {
+    #menu-form textarea,
+    #edit-form input[type="text"],
+    #edit-form textarea {
       font-family: 'Poppins', sans-serif;
       width: 100%;
       padding: 10px;
@@ -201,38 +234,45 @@
       margin-bottom: 10px;
     }
 
-    #menu-form input[type="checkbox"] {
+    #menu-form input[type="checkbox"],
+    #edit-form input[type="checkbox"] {
       margin-right: 20px;
     }
 
-    #menu-form input[type="file"] {
+    #menu-form input[type="file"],
+    #edit-form input[type="file"] {
       position: absolute;
       left: 46px;
       z-index: -1;
       top: 9px;
     }
 
-    #menu-form textarea {
+    #menu-form textarea,
+    #edit-form textarea {
       width: 100%;
     }
 
-    #menu-form .social-section {
+    #menu-form .social-section,
+    #edit-form .social-section {
       padding: 15px;
       border: 1px solid #ebebeb;
       background: #f7f7f7;
       border-radius: 3px;
     }
 
-    #menu-form .checkboxes {
+    #menu-form .checkboxes,
+    #edit-form .checkboxes {
       margin-bottom: 10px;
     }
 
-    #menu-form .upload-button-wrapper {
+    #menu-form .upload-button-wrapper,
+    #edit-form .upload-button-wrapper {
       position: relative;
       margin-bottom: 15px;
     }
 
-    #menu-form .upload-button {
+    #menu-form .upload-button,
+    #edit-form .upload-button {
       background: gray;
       color: white;
       padding: 10px 32px;
@@ -273,6 +313,23 @@
       opacity: 1;
     }
 
+    /* Modal Edit Form */
+    .edit-mask {
+      display: none;
+      background: rgba(0, 0, 0, .85);
+      width: 100%;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .edit-mask.active {
+      display: flex;
+    }
+
   </style>
 
   <body>
@@ -282,6 +339,7 @@
 
     <section id="content-wrapper">
       <div id="content">
+        <div class="edit-mask"></div>
         <div class="content-loading">
           <div class="lds-ring">
             <div></div>
@@ -289,66 +347,68 @@
             <div></div>
             <div></div>
           </div>
-
         </div>
       </div>
 
-      <form id="menu-form" name="menuForm" enctype="multipart/form-data">
-        <div class="row">
-          <div class="column">
-            <label for="title">Full Name:</label>
-            <input type="text" name="title" placeholder="Enter Full Name">
+      <div id="form-wrapper">
+        <h3 class="form-title">Add User</h3>
+        <form id="menu-form" name="menuForm" enctype="multipart/form-data">
+          <div class="row">
+            <div class="column">
+              <label for="title">Full Name:</label>
+              <input type="text" name="title" placeholder="Enter Full Name">
+            </div>
+
+            <div class="column">
+              <label for="subTitle">Position:</label>
+              <input type="text" name="subTitle" placeholder="Enter Position">
+            </div>
           </div>
 
-          <div class="column">
-            <label for="subTitle">Position:</label>
-            <input type="text" name="subTitle" placeholder="Enter Position">
-          </div>
-        </div>
-
-        <div>
           <div>
-            <label for="description">Description:</label>
-            <textarea rows="4" type="text" name="description" placeholder="Enter a Description"></textarea>
-          </div>
-        </div>
-
-        <div class="upload-button-wrapper">
-          <label class="upload-button" for="upload">Upload File</label>
-          <input id="upload" type="file" name="image" accept="image/jpeg,.jpg,.png">
-        </div>
-
-        <div class="social-section">
-          <h4>Social Media Links</h4>
-          <div class="checkboxes">
-            <label for="facebook">Facebook?</label>
-            <input type="checkbox" name="facebook">
-
-            <label for="linkedin">LinkedIn?</label>
-            <input type="checkbox" name="linkedin">
-
-            <label for="twitter">Twitter?</label>
-            <input type="checkbox" name="twitter">
+            <div>
+              <label for="description">Description:</label>
+              <textarea rows="4" type="text" name="description" placeholder="Enter a Description"></textarea>
+            </div>
           </div>
 
-          <div id="facebook" class="social-inputs">
-            <label for="fbURL">Facebook URL:</label>
-            <input type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
+          <div class="upload-button-wrapper">
+            <label class="upload-button" for="upload">Upload File</label>
+            <input id="upload" type="file" name="image" accept="image/jpeg,.jpg,.png">
           </div>
 
-          <div id="linkedin" class="social-inputs">
-            <label for="liURL">LinkedIn URL:</label>
-            <input type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
+          <div class="social-section">
+            <h4>Social Media Links</h4>
+            <div class="checkboxes">
+              <label for="facebook">Facebook?</label>
+              <input type="checkbox" name="facebook">
+
+              <label for="linkedin">LinkedIn?</label>
+              <input type="checkbox" name="linkedin">
+
+              <label for="twitter">Twitter?</label>
+              <input type="checkbox" name="twitter">
+            </div>
+
+            <div id="facebook" class="social-inputs">
+              <label for="fbURL">Facebook URL:</label>
+              <input type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
+            </div>
+
+            <div id="linkedin" class="social-inputs">
+              <label for="liURL">LinkedIn URL:</label>
+              <input type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
+            </div>
+
+            <div id="twitter" class="social-inputs">
+              <label for="twitter">Twitter URL</label>
+              <input type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
+            </div>
           </div>
 
-          <div id="twitter" class="social-inputs">
-            <label for="twitter">Twitter URL</label>
-            <input type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
-          </div>
-        </div>
-
-        <button type="submit" id="handle-submit" class="btn submit-button">Submit</button>
-      </form>
+          <button type="submit" id="handle-submit" class="btn submit-button">Submit</button>
+        </form>
+      </div>
     </section>
   </body>
 
