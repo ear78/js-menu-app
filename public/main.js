@@ -5,6 +5,7 @@ let dataState = []
 let isEditing = false;
 let stateId = '';
 
+// READ
 fetch( URL )
 .then( resp => {
   let data = resp.json()
@@ -27,6 +28,47 @@ const handleDataLoading = (type, bool) => {
   }
   else if(bool && type === 'load') {
     contentLoading.style.display = 'flex';
+  }
+}
+
+// Set Form Title, Add User or Edit User
+const setFormTitle = () => {
+  let formTitle = document.querySelector('.form-title')
+  return isEditing ? formTitle.innerHTML = 'Edit User' : formTitle.innerHTML = 'Add User'
+}
+
+const setEditMask = () => {
+  let editMask = document.querySelector('.edit-mask')
+  return isEditing ? editMask.classList.add('active') : editMask.classList.remove('active')
+}
+
+const setResetForm = (isClick) => {
+  // @params isClick <Boolean> - to use reset click event, resets entire form
+  let formTitle = document.querySelector('.form-title')
+
+  if(!isClick) {
+    // Create Reset Button
+    let reset = document.createElement('input');
+    reset.setAttribute('type', 'reset');
+    reset.value = 'Cancel';
+    formTitle.appendChild(reset)
+
+    // Resets form
+    let resetButton = document.querySelector('input[type="reset"]')
+    resetButton.addEventListener('click', function () {
+      isEditing = false
+      id = ''
+      hideSocialInputs()
+      setEditMask()
+      setFormTitle()
+      reset.remove()
+      document.querySelector('#menu-form').reset()
+    })
+  }
+
+  if(isClick) {
+    let resetButton = document.querySelector('input[type="reset"]')
+    resetButton.click()
   }
 }
 
@@ -75,8 +117,8 @@ checkBoxes.forEach(box => {
 })
 
 //Let's Create/Edit and submit our data to the backend
-let button = document.querySelector('#handle-submit');
-button.addEventListener('click', function(e) {
+let submitButton = document.querySelector('#handle-submit');
+submitButton.addEventListener('click', function(e) {
   e.preventDefault()
   e.stopPropagation();
   handleSubmit();
@@ -104,9 +146,10 @@ const handleSocialInput = (check, name) => {
 // Handle Submit of form to backend. Handles create and edit
 const handleSubmit = () => {
   handleDataLoading('load', true)
-  let postRequest
+  let submitRequest
   let form = document.forms.menuForm // Grab form elements
   let elements = [...form.elements]
+  console.log(elements);
 
   let obj = {
     social: [],
@@ -122,43 +165,50 @@ const handleSubmit = () => {
   })
 
   // Convert image file to base64
-  let file = document.querySelector('#upload').files[0]
+  let fileSelector = document.querySelector('#upload')
+  let file = fileSelector.files[0]
   let reader = new FileReader();
   reader.onload = (e) => {
     let imageFile64 = e.target.result;
     obj.image = imageFile64;
-    postRequest(); // When image is base64 send postRequest
+    submitRequest(); // When image is base64 send postRequest
   }
   if(file) {
     reader.readAsDataURL(file)
   }
 
   if(isEditing) {
-    // if(!file.length) {
-    //   let group = dataState.find(data => data._id === id)
-    //   obj.image = group.image
-    // }
-    console.log(URL + stateId, obj);
-    postRequest = () => {
+    if(!fileSelector.files.length) {
+      let group = dataState.find(data => data._id === stateId)
+      obj.image = group.image
+    }
+    // UPDATE
+    submitRequest = () => {
       axios.put(URL + stateId, obj).then(resp => {
         let data = resp.data
         dataState = [...data]
         addPageContent(data)
         handleDataLoading('load', false)
+        setEditMask()
+        setResetForm(true)
+        getActionButtons()
       }).catch(error => {
         console.log('error:', error)
       })
     }
+    submitRequest()
   }
 
   if(!isEditing) {
-    // Create ajax call to backend
-    postRequest = () => {
+    // CREATE
+    submitRequest = () => {
       axios.post(URL, obj).then((resp) => {
         let data = resp.data
         dataState = [...data]
         addPageContent(data)
-        handleDataLoading('load', false);
+        handleDataLoading('load', false)
+        setResetForm(true)
+        getActionButtons()
       }).catch((error) => {
         console.log('error:', error);
       })
@@ -187,7 +237,7 @@ const getActionButtons = () => {
   })
 }
 
-// Delete ajax call to backend
+// DELETE
 const handleDelete = (id) => {
   handleDataLoading('load', true);
 
@@ -204,36 +254,18 @@ const handleDelete = (id) => {
 
 // Edit form functionality
 const handleEdit = (id) => {
-  // Set loading, isEditing, id
   handleDataLoading('edit', true)
   isEditing = true;
   stateId = id
 
-  // Open mask
-  let editMask = document.querySelector('.edit-mask');
-  editMask.classList.add('active');
+  // Open Edit mask
+  setEditMask()
 
   // Set User Text
-  let formTitle = document.querySelector('.form-title')
-  formTitle.innerHTML = 'Edit User';
+  setFormTitle()
 
-  // Create Reset Button
-  let reset = document.createElement('input');
-  reset.setAttribute('type', 'reset');
-  reset.value = 'Cancel';
-  formTitle.appendChild(reset)
-
-  // Resets form
-  let resetButton = document.querySelector('input[type="reset"]')
-  resetButton.addEventListener('click', function () {
-    isEditing = false
-    id = ''
-    hideSocialInputs()
-    editMask.classList.remove('active')
-    formTitle.innerHTML = 'Add User'
-    reset.remove()
-    document.querySelector('#menu-form').reset()
-  })
+  // reset form
+  setResetForm()
 
   // Form data
   let form = document.forms.menuForm
