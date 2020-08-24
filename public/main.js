@@ -17,6 +17,40 @@ axios.get( URL ).then( resp => {
   }
 })
 
+// Let's print the data dynamically to the browser
+const addPageContent = (data) => {
+  if(document.querySelector('.items-wrapper') !== null) {
+    document.querySelector('.items-wrapper').remove();
+  }
+  var newDiv = document.createElement( 'div' );
+  var att = document.createAttribute( 'class' );
+  att.value = 'items-wrapper';
+  newDiv.setAttributeNode( att )
+
+  var content = data.map((item, index) => {
+    return `<div id="${item._id}" class="item">
+              <div class="top-section">
+                <img src="${item.image}"/>
+                <div class="functions">
+                  <i class="fa fa-pencil-square-o edit" aria-hidden="true"></i>
+                  <i class="fa fa-trash delete" aria-hidden="true"></i>
+                </div>
+              </div>
+              <h4 class="title">${item.title}</h4>
+              <p class="sub-title">${item.subTitle}</p>
+              <p class="description">${item.description}</p>
+              <div class="social-box">
+                ${item.social.map(link => {
+                  return `<a href="${link.link}"><i class="fa fa-${link.icon}" aria-hidden="true"></i></a>`
+                }).join(' ')}
+              </div>
+            </div>`;
+}).join( '' )
+
+newDiv.innerHTML = content;
+document.getElementById( 'content').appendChild( newDiv )
+}
+
 // Sets Loading Spinner
 const handleDataLoading = (type, bool) => {
   let contentLoading = document.querySelector('.content-loading');
@@ -76,40 +110,6 @@ const setResetForm = (isClick) => {
   }
 }
 
-// Let's print the data dynamically to the browser
-const addPageContent = (data) => {
-  if(document.querySelector('.items-wrapper') !== null) {
-    document.querySelector('.items-wrapper').remove();
-  }
-  var newDiv = document.createElement( 'div' );
-  var att = document.createAttribute( 'class' );
-  att.value = 'items-wrapper';
-  newDiv.setAttributeNode( att )
-
-  var content = data.map((item, index) => {
-    return `<div id="${item._id}" class="item">
-              <div class="top-section">
-                <img src="${item.image}"/>
-                <div class="functions">
-                  <i class="fa fa-pencil-square-o edit" aria-hidden="true"></i>
-                  <i class="fa fa-trash delete" aria-hidden="true"></i>
-                </div>
-              </div>
-              <h4 class="title">${item.title}</h4>
-              <p class="sub-title">${item.subTitle}</p>
-              <p class="description">${item.description}</p>
-              <div class="social-box">
-                ${item.social.map(link => {
-                  return `<a href="${link.link}"><i class="fa fa-${link.icon}" aria-hidden="true"></i></a>`
-                }).join(' ')}
-              </div>
-            </div>`;
-}).join( '' )
-
-newDiv.innerHTML = content;
-document.getElementById( 'content').appendChild( newDiv )
-}
-
 // Let's add click handlers to our checkboxes
 let checkBoxes = document.querySelectorAll('input[type="checkbox"]');
 checkBoxes.forEach(box => {
@@ -144,6 +144,27 @@ const handleSocialInput = (check, name) => {
     if(!check && name === socialName) {
       document.querySelector(`#${name}`).style.display = 'none'
     }
+  })
+}
+
+// Edit and Delete Buttons
+const getActionButtons = () => {
+  let deleteButtons = document.querySelectorAll('.item .delete');
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation();
+      let id = e.target.offsetParent.id
+      handleDelete(id)
+    })
+  })
+
+  let editButtons = document.querySelectorAll('.item .edit');
+  editButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation();
+      let id = e.target.offsetParent.id;
+      handleEdit(id);
+    })
   })
 }
 
@@ -182,7 +203,7 @@ const handleSubmit = () => {
   }
 
   if(isEditing) {
-    // if no pic selected, grab pic from loaded data 
+    // if no pic selected, grab pic from loaded data
     if(!fileSelector.files.length) {
       let group = dataState.find(data => data._id === stateId)
       obj.image = group.image
@@ -234,27 +255,6 @@ const handleSubmit = () => {
       })
     }
   }
-}
-
-// Delete handlers for all delete buttons
-const getActionButtons = () => {
-  let deleteButtons = document.querySelectorAll('.item .delete');
-  deleteButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.stopPropagation();
-      let id = e.target.offsetParent.id
-      handleDelete(id)
-    })
-  })
-
-  let editButtons = document.querySelectorAll('.item .edit');
-  editButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.stopPropagation();
-      let id = e.target.offsetParent.id;
-      handleEdit(id);
-    })
-  })
 }
 
 // DELETE
