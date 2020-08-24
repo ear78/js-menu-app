@@ -6,18 +6,15 @@ let isEditing = false;
 let stateId = '';
 
 // READ
-fetch( URL )
-.then( resp => {
-  let data = resp.json()
-  data.then(d => {
-    console.log( 'd', d );
-    if(d) {
-      dataState = [...d]
-      addPageContent(d);
-      handleDataLoading('load', false);
-      getActionButtons(); // get buttons after data/content is set
-    }
-  })
+axios.get( URL ).then( resp => {
+  let data = resp.data
+  console.log(data);
+  if(data) {
+    dataState = [...data]
+    addPageContent(data);
+    handleDataLoading('load', false);
+    getActionButtons(); // get buttons after data/content is set
+  }
 })
 
 // Sets Loading Spinner
@@ -42,8 +39,8 @@ const setEditMask = () => {
   return isEditing ? editMask.classList.add('active') : editMask.classList.remove('active')
 }
 
+// @params isClick <Boolean> - to use reset click event, resets entire form
 const setResetForm = (isClick) => {
-  // @params isClick <Boolean> - to use reset click event, resets entire form
   let formTitle = document.querySelector('.form-title')
 
   if(!isClick) {
@@ -66,9 +63,16 @@ const setResetForm = (isClick) => {
     })
   }
 
-  if(isClick) {
+  if(isClick && isEditing) {
     let resetButton = document.querySelector('input[type="reset"]')
     resetButton.click()
+  }
+
+  if(isClick && !isEditing) {
+    hideSocialInputs()
+    document.querySelector('#menu-form').reset()
+    setFormTitle()
+    id = ''
   }
 }
 
@@ -149,7 +153,7 @@ const handleSubmit = () => {
   let submitRequest
   let form = document.forms.menuForm // Grab form elements
   let elements = [...form.elements]
-  console.log(elements);
+  // console.log(elements)
 
   let obj = {
     social: [],
@@ -178,9 +182,26 @@ const handleSubmit = () => {
   }
 
   if(isEditing) {
+    // if no pic selected, grab pic from loaded data 
     if(!fileSelector.files.length) {
       let group = dataState.find(data => data._id === stateId)
       obj.image = group.image
+
+      // UPDATE
+      submitRequest = () => {
+        axios.put(URL + stateId, obj).then(resp => {
+          let data = resp.data
+          dataState = [...data]
+          addPageContent(data)
+          handleDataLoading('load', false)
+          setEditMask()
+          setResetForm(true)
+          getActionButtons()
+        }).catch(error => {
+          console.log('error:', error)
+        })
+      }
+      submitRequest()
     }
     // UPDATE
     submitRequest = () => {
@@ -196,7 +217,6 @@ const handleSubmit = () => {
         console.log('error:', error)
       })
     }
-    submitRequest()
   }
 
   if(!isEditing) {
