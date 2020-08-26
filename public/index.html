@@ -298,19 +298,14 @@
       transform: translateY(-3px);
     }
 
-    .btn.btn--primary {
-      background: #000;
+    .btn.btn--disabled {
+      opacity: .2;
     }
 
-    .btn.btn--delete {
-      padding: 6px 16px;
-      font-size: .75rem;
-      opacity: .7;
-      transition: all .2s ease;
-    }
-
-    .btn.btn--delete:hover {
-      opacity: 1;
+    .btn.btn--disabled:hover {
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: translateY(0);
     }
 
     /* Modal Edit Form */
@@ -327,6 +322,17 @@
     }
 
     .edit-mask.active {
+      display: flex;
+    }
+
+    /* Errors */
+    .error {
+      display: none;
+      color: red;
+      font-size: .8rem;
+    }
+
+    .error.active {
       display: flex;
     }
 
@@ -356,19 +362,22 @@
           <div class="row">
             <div class="column">
               <label for="title">Full Name:</label>
-              <input type="text" name="title" placeholder="Enter Full Name">
+              <input type="text" name="title" placeholder="Enter Full Name" maxlength="40" required>
+              <span class="error">Please enter your full name.</span>
             </div>
 
             <div class="column">
               <label for="subTitle">Position:</label>
-              <input type="text" name="subTitle" placeholder="Enter Position">
+              <input type="text" name="subTitle" placeholder="Enter Position" maxlength="40" required>
+              <span class="error">Please enter a position.</span>
             </div>
           </div>
 
           <div>
             <div>
               <label for="description">Description:</label>
-              <textarea rows="4" type="text" name="description" placeholder="Enter a Description"></textarea>
+              <textarea rows="4" type="text" name="description" placeholder="Enter a Description" required></textarea>
+              <span class="error">Please enter a description.</span>
             </div>
           </div>
 
@@ -406,7 +415,7 @@
             </div>
           </div>
 
-          <button type="submit" id="handle-submit" class="btn submit-button">Submit</button>
+          <button type="submit" id="handle-submit" class="btn btn--disabled submit-button disabled" disabled>Submit</button>
         </form>
       </div>
     </section>

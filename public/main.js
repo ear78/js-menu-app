@@ -1,30 +1,30 @@
 
 // Let's Grab the Data from the backend on page load
-const URL = 'http://localhost:5001/api/menu-items/';
+const URL = 'http://localhost:5001/api/menu-items/'
 let dataState = []
-let isEditing = false;
-let stateId = '';
+let isEditing = false
+let stateId = ''
 
 // READ
 axios.get( URL ).then( resp => {
   let data = resp.data
-  console.log(data);
+  console.log(data)
   if(data) {
     dataState = [...data]
-    addPageContent(data);
-    handleDataLoading('load', false);
-    getActionButtons(); // get buttons after data/content is set
+    addPageContent(data)
+    handleDataLoading('load', false)
+    getActionButtons()
   }
 })
 
 // Let's print the data dynamically to the browser
 const addPageContent = (data) => {
   if(document.querySelector('.items-wrapper') !== null) {
-    document.querySelector('.items-wrapper').remove();
+    document.querySelector('.items-wrapper').remove()
   }
-  var newDiv = document.createElement( 'div' );
-  var att = document.createAttribute( 'class' );
-  att.value = 'items-wrapper';
+  var newDiv = document.createElement( 'div' )
+  var att = document.createAttribute( 'class' )
+  att.value = 'items-wrapper'
   newDiv.setAttributeNode( att )
 
   var content = data.map((item, index) => {
@@ -44,21 +44,21 @@ const addPageContent = (data) => {
                   return `<a href="${link.link}"><i class="fa fa-${link.icon}" aria-hidden="true"></i></a>`
                 }).join(' ')}
               </div>
-            </div>`;
-}).join( '' )
+            </div>`
+          }).join( '' )
 
-newDiv.innerHTML = content;
-document.getElementById( 'content').appendChild( newDiv )
+  newDiv.innerHTML = content
+  document.getElementById( 'content').appendChild( newDiv )
 }
 
 // Sets Loading Spinner
 const handleDataLoading = (type, bool) => {
-  let contentLoading = document.querySelector('.content-loading');
+  let contentLoading = document.querySelector('.content-loading')
   if(!bool && type === 'load') {
-    contentLoading.style.display = 'none';
+    contentLoading.style.display = 'none'
   }
   else if(bool && type === 'load') {
-    contentLoading.style.display = 'flex';
+    contentLoading.style.display = 'flex'
   }
 }
 
@@ -79,9 +79,9 @@ const setResetForm = (isClick) => {
 
   if(!isClick) {
     // Create Reset Button
-    let reset = document.createElement('input');
-    reset.setAttribute('type', 'reset');
-    reset.value = 'Cancel';
+    let reset = document.createElement('input')
+    reset.setAttribute('type', 'reset')
+    reset.value = 'Cancel'
     formTitle.appendChild(reset)
 
     // Resets form
@@ -111,7 +111,7 @@ const setResetForm = (isClick) => {
 }
 
 // Let's add click handlers to our checkboxes
-let checkBoxes = document.querySelectorAll('input[type="checkbox"]');
+let checkBoxes = document.querySelectorAll('input[type="checkbox"]')
 checkBoxes.forEach(box => {
   box.addEventListener('click', function(e) {
     let checked = e.target.checked
@@ -121,19 +121,19 @@ checkBoxes.forEach(box => {
 })
 
 //Let's Create/Edit and submit our data to the backend
-let submitButton = document.querySelector('#handle-submit');
+let submitButton = document.querySelector('#handle-submit')
 submitButton.addEventListener('click', function(e) {
   e.preventDefault()
-  e.stopPropagation();
-  handleSubmit();
+  e.stopPropagation()
+  handleSubmit()
 })
 
 // Show/Hide social html text inputs
 const hideSocialInputs = () => {
-  let socialInputs = document.querySelectorAll('.social-inputs');
-  socialInputs.forEach(input => input.style.display = 'none'); // hide inputs initially
+  let socialInputs = document.querySelectorAll('.social-inputs')
+  socialInputs.forEach(input => input.style.display = 'none') // hide inputs initially
 }
-hideSocialInputs() // hide inputs on initial load
+hideSocialInputs()// Hide on load
 
 const handleSocialInput = (check, name) => {
   let socialNames = ['facebook', 'linkedin', 'twitter', 'instagram']
@@ -149,21 +149,21 @@ const handleSocialInput = (check, name) => {
 
 // Edit and Delete Buttons
 const getActionButtons = () => {
-  let deleteButtons = document.querySelectorAll('.item .delete');
+  let deleteButtons = document.querySelectorAll('.item .delete')
   deleteButtons.forEach(button => {
     button.addEventListener('click', function(e) {
-      e.stopPropagation();
+      e.stopPropagation()
       let id = e.target.offsetParent.id
       handleDelete(id)
     })
   })
 
-  let editButtons = document.querySelectorAll('.item .edit');
+  let editButtons = document.querySelectorAll('.item .edit')
   editButtons.forEach(button => {
     button.addEventListener('click', function(e) {
-      e.stopPropagation();
-      let id = e.target.offsetParent.id;
-      handleEdit(id);
+      e.stopPropagation()
+      let id = e.target.offsetParent.id
+      handleEdit(id)
     })
   })
 }
@@ -178,7 +178,7 @@ const handleSubmit = () => {
 
   let obj = {
     social: [],
-  };
+  }
 
   elements.forEach((input, index) => {
       if(input.name.indexOf('URL') !== -1 && input.value.length) {
@@ -192,11 +192,11 @@ const handleSubmit = () => {
   // Convert image file to base64
   let fileSelector = document.querySelector('#upload')
   let file = fileSelector.files[0]
-  let reader = new FileReader();
+  let reader = new FileReader()
   reader.onload = (e) => {
-    let imageFile64 = e.target.result;
-    obj.image = imageFile64;
-    submitRequest(); // When image is base64 send postRequest
+    let imageFile64 = e.target.result
+    obj.image = imageFile64
+    submitRequest() // When image is base64 send postRequest
   }
   if(file) {
     reader.readAsDataURL(file)
@@ -251,7 +251,7 @@ const handleSubmit = () => {
         setResetForm(true)
         getActionButtons()
       }).catch((error) => {
-        console.log('error:', error);
+        console.log('error:', error)
       })
     }
   }
@@ -259,7 +259,7 @@ const handleSubmit = () => {
 
 // DELETE
 const handleDelete = (id) => {
-  handleDataLoading('load', true);
+  handleDataLoading('load', true)
 
   axios.delete(URL + id).then((resp) => {
     let data = resp.data
@@ -275,7 +275,7 @@ const handleDelete = (id) => {
 // Edit form functionality
 const handleEdit = (id) => {
   handleDataLoading('edit', true)
-  isEditing = true;
+  isEditing = true
   stateId = id
 
   // Open Edit mask
@@ -294,7 +294,7 @@ const handleEdit = (id) => {
   let elements = [...form.elements]
   elements.forEach(element => {
     if(element.name === 'title') {
-      element.value = card.title;
+      element.value = card.title
     }
     if(element.name === 'subTitle') {
       element.value = card.subTitle
@@ -315,4 +315,59 @@ const handleEdit = (id) => {
       document.querySelector('input[name="twitterURL"]').value = card.social[2].link
     }
   })
+}
+
+
+let form = document.forms.menuForm
+// const fullName = document.querySelector('input[name="title"]')
+const error = document.querySelector('input[name="title"] + span.error')
+
+// fullName.addEventListener('input', function() {
+//   if(fullName.validity.valid) {
+//     error.innerHTML = ''; // Reset the content of the message
+//     error.className = 'error';
+//   } else {
+//     showError();
+//   }
+// })
+
+
+// form.checkValidity()
+// console.log(form.checkValidity());
+let elements = [...form.elements]
+elements.forEach((el, index) => {
+  if(el.type !== 'submit') {
+    console.log('form:', el.type);
+    if(el.type === 'text' || el.type === 'textarea') {
+      el.addEventListener('input', function(e) {
+        console.log(el.name);
+        if(el.validity.valid) {
+          error.innerHTML = ''; // Reset the content of the message
+          error.className = 'error';
+        } else {
+          showError(el.name);
+        }
+
+        // elements.forEach(formEl => {
+        //   console.log('form elements blurred', formEl.value.length, formEl.checkValidity());
+        // })
+      })
+    }
+  }
+})
+
+const showError = (name, index) => {
+  let errorSelector = `[name="${name}"] + span.error`
+  let error = document.querySelector(errorSelector)
+  let selector = `[name="${name}"]`
+  let selected = document.querySelector(selector)
+  // console.log(selector, selected);
+  if(selected.validity.valueMissing) {
+    error.textContent = 'Please enter your Full Name.';
+  } else if(selected.validity.tooLong) {
+    error.textContent = `Full Name should be a max ${ selected.maxlength } characters you entered ${ selected.value.length }.`;
+  }
+
+  // Set the styling appropriately
+  error.className = 'error active';
 }
