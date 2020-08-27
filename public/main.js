@@ -43,6 +43,7 @@ const addPageContent = (data) => {
                 ${item.social.map(link => {
                   return `<a href="${link.link}"><i class="fa fa-${link.icon}" aria-hidden="true"></i></a>`
                 }).join(' ')}
+                <span class="phone">${item.phone}</span>
               </div>
             </div>`
           }).join( '' )
@@ -322,16 +323,6 @@ let form = document.forms.menuForm
 // const fullName = document.querySelector('input[name="title"]')
 const error = document.querySelector('input[name="title"] + span.error')
 
-// fullName.addEventListener('input', function() {
-//   if(fullName.validity.valid) {
-//     error.innerHTML = ''; // Reset the content of the message
-//     error.className = 'error';
-//   } else {
-//     showError();
-//   }
-// })
-
-
 // form.checkValidity()
 // console.log(form.checkValidity());
 let elements = [...form.elements]
@@ -340,32 +331,32 @@ elements.forEach((el, index) => {
     console.log('form:', el.type);
     if(el.type === 'text' || el.type === 'textarea') {
       el.addEventListener('input', function(e) {
-        console.log(el.name);
-        if(el.validity.valid) {
-          error.innerHTML = ''; // Reset the content of the message
+        let error = document.querySelector(`[name="${e.target.name}"] + span.error`)
+        if(e.target.validity.valid) {
           error.className = 'error';
         } else {
           showError(el.name);
         }
-
-        // elements.forEach(formEl => {
-        //   console.log('form elements blurred', formEl.value.length, formEl.checkValidity());
-        // })
       })
     }
   }
 })
 
-const showError = (name, index) => {
+const showError = (name) => {
   let errorSelector = `[name="${name}"] + span.error`
   let error = document.querySelector(errorSelector)
   let selector = `[name="${name}"]`
   let selected = document.querySelector(selector)
   // console.log(selector, selected);
   if(selected.validity.valueMissing) {
-    error.textContent = 'Please enter your Full Name.';
-  } else if(selected.validity.tooLong) {
-    error.textContent = `Full Name should be a max ${ selected.maxlength } characters you entered ${ selected.value.length }.`;
+    error.textContent = 'Required field.'
+  }
+  else if(selected.validity.patternMismatch) {
+    console.log('mismatch :');
+    error.textContent = 'Please match format 123-123-1234'
+  }
+  else if(selected.validity.tooLong) {
+    error.textContent = `This field should be a max of ${ selected.maxlength } characters, you entered ${ selected.value.length }.`
   }
 
   // Set the styling appropriately

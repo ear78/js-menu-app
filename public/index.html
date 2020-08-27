@@ -181,6 +181,27 @@
       margin: 0;
     }
 
+    .item .phone {
+      position: absolute;
+      right: 15px;
+      color: #757575;
+      font-size: .8rem;
+      line-height: 2;
+    }
+
+    input,
+    textarea {
+      background: #f7f7f7;
+      border: 1px solid #ebebeb;
+      border-radius: 3px;
+    }
+
+    input[type="file"] {
+      background: none;
+      border: initial;
+      border: none;
+    }
+
     #form-wrapper {
       max-height: 85vh;
       overflow-y: auto;
@@ -362,13 +383,13 @@
           <div class="row">
             <div class="column">
               <label for="title">Full Name:</label>
-              <input type="text" name="title" placeholder="Enter Full Name" maxlength="40" required>
+              <input type="text" name="title" placeholder="Enter Full Name" maxlength="30" required>
               <span class="error">Please enter your full name.</span>
             </div>
 
             <div class="column">
               <label for="subTitle">Position:</label>
-              <input type="text" name="subTitle" placeholder="Enter Position" maxlength="40" required>
+              <input type="text" name="subTitle" placeholder="Enter Position" maxlength="30" required>
               <span class="error">Please enter a position.</span>
             </div>
           </div>
@@ -379,6 +400,12 @@
               <textarea rows="4" type="text" name="description" placeholder="Enter a Description" required></textarea>
               <span class="error">Please enter a description.</span>
             </div>
+          </div>
+
+          <div>
+            <label for="phone">Phone Number:</label>
+            <input type="text" name="phone" placeholder="123-123-1234" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="12" required>
+            <span class="error">Please enter a phone number.</span>
           </div>
 
           <div class="upload-button-wrapper">
