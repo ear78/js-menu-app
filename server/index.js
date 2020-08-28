@@ -13,7 +13,7 @@ app.use( cors() );
 const menuItems = require( './routes/api/menuItems.js' );
 
 // Serve files
-app.use( express.static( 'public' ) );
+app.use( express.static( 'public/dist' ) );
 
 // Api Routes
 app.use( '/api/menu-items', menuItems );
