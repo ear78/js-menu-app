@@ -1,3 +1,9 @@
+/* Libraries */
+import axios from '../node_modules/axios'
+
+/* Import SCSS */
+import './scss/style.scss'
+
 
 // Let's Grab the Data from the backend on page load
 const URL = 'http://localhost:5001/api/menu-items/'
@@ -349,7 +355,7 @@ const showError = (name) => {
   let selected = document.querySelector(selector)
   // console.log(selector, selected);
   if(selected.validity.valueMissing) {
-    error.textContent = 'Required field.'
+    error.textContent = 'Required field.';
   }
   else if(selected.validity.patternMismatch) {
     console.log('mismatch :');
