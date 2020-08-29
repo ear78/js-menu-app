@@ -1,7 +1,8 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: './src/main.js',
+  entry: ['./src/main.js', './src/scss/style.scss'],
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
@@ -15,14 +16,15 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          // Creates `style` nodes from JS strings
-          'style-loader',
-          // Translates CSS into CommonJS
+          MiniCssExtractPlugin.loader,
           'css-loader',
-          // Compiles Sass to CSS
           'sass-loader',
         ],
       },
     ],
   },
+  plugins: [new MiniCssExtractPlugin({
+    filename: '[name].css',
+    chunkFilename: '[id].css',
+  })],
 };
