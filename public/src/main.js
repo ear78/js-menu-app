@@ -329,15 +329,15 @@ const handleEdit = (id) => {
 let form = document.forms.menuForm
 const error = document.querySelector('input[name="title"] + span.error')
 
-// form.checkValidity()
-// console.log(form.checkValidity());
 let elements = [...form.elements]
 elements.forEach((el, index) => {
   if(el.type !== 'submit') {
     // console.log('form:', el.type, el.className);
     if((el.type === 'text' || el.type === 'textarea') && el.className !== 'input-ignore') {
       el.addEventListener('input', function(e) {
+        isFormValid()
         let error = document.querySelector(`[name="${e.target.name}"] + span.error`)
+
         if(e.target.validity.valid) {
           error.className = 'error';
         } else {
@@ -353,7 +353,7 @@ const showError = (name) => {
   let error = document.querySelector(errorSelector)
   let selector = `[name="${name}"]`
   let selected = document.querySelector(selector)
-  // console.log(selector, selected);
+
   if(selected.validity.valueMissing) {
     error.textContent = 'Required field.';
   }
@@ -367,4 +367,23 @@ const showError = (name) => {
 
   // Set the styling appropriately
   error.className = 'error active';
+}
+
+const isFormValid = () => {
+  let arr = []
+  elements.forEach(el => {
+    if((el.type === 'text' || el.type === 'textarea') && el.className !== 'input-ignore') {
+      arr.push(el.checkValidity())
+    }
+  })
+
+  // If all inputs are valid
+  let formValid = arr.every((val) => val === true)
+
+  // Set disabled submit button
+  if(formValid) {
+    document.querySelector('#handle-submit').classList.remove('btn--disabled')
+  } else {
+    document.querySelector('#handle-submit').classList.add('btn--disabled')
+  }
 }
