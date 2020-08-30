@@ -55,7 +55,7 @@
 
           <div>
             <label for="phone">Phone Number:</label>
-            <input type="text" name="phone" placeholder="123-123-1234" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" maxlength="12" required>
+            <input type="text" name="phone" placeholder="(123)555-1234" pattern="[\(]\d{3}[\)]\d{3}[-]\d{4}" maxlength="13" required>
             <span class="error">Please enter a phone number.</span>
           </div>
 
@@ -79,21 +79,21 @@
 
             <div id="facebook" class="social-inputs">
               <label for="fbURL">Facebook URL:</label>
-              <input type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
+              <input class="input-ignore" type="text" name="facebookURL" placeholder="ex. https://facebook.com/mixermanelliot">
             </div>
 
             <div id="linkedin" class="social-inputs">
               <label for="liURL">LinkedIn URL:</label>
-              <input type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
+              <input class="input-ignore" type="text" name="linkedinURL" placeholder="ex. https://linkedin.com/in/elliot-richardson">
             </div>
 
             <div id="twitter" class="social-inputs">
               <label for="twitter">Twitter URL</label>
-              <input type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
+              <input class="input-ignore" type="text" name="twitterURL" placeholder="ex. https://twitter.com/mixermanelliot">
             </div>
           </div>
 
-          <button type="submit" id="handle-submit" class="btn btn--disabled submit-button disabled" disabled>Submit</button>
+          <button type="submit" id="handle-submit" class="btn btn--disabled submit-button disabled">Submit</button>
         </form>
       </div>
     </section>

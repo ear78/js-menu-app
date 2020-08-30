@@ -203,7 +203,7 @@ const handleSubmit = () => {
   reader.onload = (e) => {
     let imageFile64 = e.target.result
     obj.image = imageFile64
-    submitRequest() // When image is base64 send postRequest
+    // submitRequest() // When image is base64 send postRequest
   }
   if(file) {
     reader.readAsDataURL(file)
@@ -248,19 +248,20 @@ const handleSubmit = () => {
   }
 
   if(!isEditing) {
+    console.log('post:', obj);
     // CREATE
-    submitRequest = () => {
-      axios.post(URL, obj).then((resp) => {
-        let data = resp.data
-        dataState = [...data]
-        addPageContent(data)
-        handleDataLoading('load', false)
-        setResetForm(true)
-        getActionButtons()
-      }).catch((error) => {
-        console.log('error:', error)
-      })
-    }
+    // submitRequest = () => {
+    //   axios.post(URL, obj).then((resp) => {
+    //     let data = resp.data
+    //     dataState = [...data]
+    //     addPageContent(data)
+    //     handleDataLoading('load', false)
+    //     setResetForm(true)
+    //     getActionButtons()
+    //   }).catch((error) => {
+    //     console.log('error:', error)
+    //   })
+    // }
   }
 }
 
@@ -326,7 +327,6 @@ const handleEdit = (id) => {
 
 
 let form = document.forms.menuForm
-// const fullName = document.querySelector('input[name="title"]')
 const error = document.querySelector('input[name="title"] + span.error')
 
 // form.checkValidity()
@@ -334,8 +334,8 @@ const error = document.querySelector('input[name="title"] + span.error')
 let elements = [...form.elements]
 elements.forEach((el, index) => {
   if(el.type !== 'submit') {
-    console.log('form:', el.type);
-    if(el.type === 'text' || el.type === 'textarea') {
+    // console.log('form:', el.type, el.className);
+    if((el.type === 'text' || el.type === 'textarea') && el.className !== 'input-ignore') {
       el.addEventListener('input', function(e) {
         let error = document.querySelector(`[name="${e.target.name}"] + span.error`)
         if(e.target.validity.valid) {
@@ -359,7 +359,7 @@ const showError = (name) => {
   }
   else if(selected.validity.patternMismatch) {
     console.log('mismatch :');
-    error.textContent = 'Please match format 123-123-1234'
+    error.textContent = 'Please match format (123)555-1234'
   }
   else if(selected.validity.tooLong) {
     error.textContent = `This field should be a max of ${ selected.maxlength } characters, you entered ${ selected.value.length }.`
