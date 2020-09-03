@@ -20,6 +20,7 @@ router.post( '/', async ( req, res ) => {
     title: req.body.title,
     subTitle: req.body.subTitle,
     description: req.body.description,
+    phone: req.body.phone,
     social: req.body.social,
     image: req.body.image,
     date: new Date()
@@ -48,6 +49,7 @@ router.put( '/:id', async ( req, res ) => {
       title: req.body.title,
       subTitle: req.body.subTitle,
       description: req.body.description,
+      phone: req.body.phone,
       social: req.body.social,
       image: req.body.image,
       date: new Date()
